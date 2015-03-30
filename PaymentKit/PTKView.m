@@ -49,10 +49,10 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 - (BOOL)cardCVCShouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)replacementString;
 
 @property (nonatomic) UIView *opaqueOverGradientView;
-@property (nonatomic) PTKCardNumber *cardNumber;
-@property (nonatomic) PTKCardExpiry *cardExpiry;
-@property (nonatomic) PTKCardCVC *cardCVC;
-@property (nonatomic) PTKAddressZip *addressZip;
+//@property (nonatomic) PTKCardNumber *cardNumber;
+//@property (nonatomic) PTKCardExpiry *cardExpiry;
+//@property (nonatomic) PTKCardCVC *cardCVC;
+//@property (nonatomic) PTKAddressZip *addressZip;
 @end
 
 #pragma mark -
@@ -230,22 +230,23 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
                              [self.cardExpiryField removeFromSuperview];
                              [self.cardCVCField removeFromSuperview];
                          }];
+        [self.cardNumberField becomeFirstResponder];
     }
 
-    [self.cardNumberField becomeFirstResponder];
+    
+    
 }
 
-- (void)stateMeta
-{
+- (void)stateMetaWithFirstResponder: (BOOL) bolResign{
     _isInitialState = NO;
-
+    
     CGSize cardNumberSize;
     CGSize lastGroupSize;
-
+    
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
     if ([self.cardNumber.formattedString respondsToSelector:@selector(sizeWithAttributes:)]) {
         NSDictionary *attributes = @{NSFontAttributeName: DefaultBoldFont};
-
+        
         cardNumberSize = [self.cardNumber.formattedString sizeWithAttributes:attributes];
         lastGroupSize = [self.cardNumber.lastGroup sizeWithAttributes:attributes];
     } else {
@@ -254,38 +255,47 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
     }
 #else
     NSDictionary *attributes = @{NSFontAttributeName: DefaultBoldFont};
-
+    
     cardNumberSize = [self.cardNumber.formattedString sizeWithAttributes:attributes];
     lastGroupSize = [self.cardNumber.lastGroup sizeWithAttributes:attributes];
 #endif
-
+    
     CGFloat frameX = self.cardNumberField.frame.origin.x - (cardNumberSize.width - lastGroupSize.width);
-
+    
     [UIView animateWithDuration:0.05 delay:0.35 options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.opaqueOverGradientView.alpha = 1.0;
                      } completion:^(BOOL finished) {
-    }];
+                     }];
     [UIView animateWithDuration:0.400 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.cardExpiryField.frame = CGRectMake(kPTKViewCardExpiryFieldEndX,
-                self.cardExpiryField.frame.origin.y,
-                self.cardExpiryField.frame.size.width,
-                self.cardExpiryField.frame.size.height);
+                                                self.cardExpiryField.frame.origin.y,
+                                                self.cardExpiryField.frame.size.width,
+                                                self.cardExpiryField.frame.size.height);
         self.cardCVCField.frame = CGRectMake(kPTKViewCardCVCFieldEndX,
-                self.cardCVCField.frame.origin.y,
-                self.cardCVCField.frame.size.width,
-                self.cardCVCField.frame.size.height);
+                                             self.cardCVCField.frame.origin.y,
+                                             self.cardCVCField.frame.size.width,
+                                             self.cardCVCField.frame.size.height);
         self.cardNumberField.frame = CGRectMake(frameX,
-                self.cardNumberField.frame.origin.y,
-                self.cardNumberField.frame.size.width,
-                self.cardNumberField.frame.size.height);
+                                                self.cardNumberField.frame.origin.y,
+                                                self.cardNumberField.frame.size.width,
+                                                self.cardNumberField.frame.size.height);
     }                completion:nil];
-
+    
     [self addSubview:self.placeholderView];
     [self.innerView addSubview:self.cardExpiryField];
     [self.innerView addSubview:self.cardCVCField];
-    [self.cardExpiryField becomeFirstResponder];
+    if (bolResign) {
+        [self.cardExpiryField becomeFirstResponder];
+    }
+    
 }
+
+- (void)stateMeta
+{
+    [self stateMetaWithFirstResponder:YES];
+}
+
 
 - (void)stateCardCVC
 {

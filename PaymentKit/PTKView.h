@@ -25,11 +25,12 @@
 
 - (BOOL)isValid;
 
-@property (nonatomic, readonly) UIView *opaqueOverGradientView;
-@property (nonatomic, readonly) PTKCardNumber *cardNumber;
-@property (nonatomic, readonly) PTKCardExpiry *cardExpiry;
-@property (nonatomic, readonly) PTKCardCVC *cardCVC;
-@property (nonatomic, readonly) PTKAddressZip *addressZip;
+// commented by togonow
+//@property (nonatomic, readonly) UIView *opaqueOverGradientView;
+//@property (nonatomic, readonly) PTKCardNumber *cardNumber;
+//@property (nonatomic, readonly) PTKCardExpiry *cardExpiry;
+//@property (nonatomic, readonly) PTKCardCVC *cardCVC;
+//@property (nonatomic, readonly) PTKAddressZip *addressZip;
 
 @property IBOutlet UIView *innerView;
 @property IBOutlet UIView *clipView;
@@ -39,5 +40,16 @@
 @property IBOutlet UIImageView *placeholderView;
 @property (nonatomic, weak) id <PTKViewDelegate> delegate;
 @property (readonly) PTKCard *card;
+
+
+
+#pragma mark updated by togonow
+- (void)stateMetaWithFirstResponder: (BOOL) bolResign;    // when created the field programattically, skip keyboard reponder
+- (void)stateMeta;
+- (void)setup;
+@property (nonatomic, retain) PTKCardExpiry *cardExpiry;
+@property (nonatomic, retain) PTKCardCVC *cardCVC;
+@property (nonatomic, retain) PTKCardNumber *cardNumber;
+@property (nonatomic, retain) PTKAddressZip *addressZip;
 
 @end
