@@ -396,6 +396,22 @@ static NSString *const kPTKOldLocalizedStringsTableName = @"STPaymentLocalizable
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    
+    UIToolbar* numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+    
+    numberToolbar.items = [NSArray arrayWithObjects:
+                           //                           [[UIBarButtonItem alloc] initWithTitle:@"<" style:UIBarButtonItemStyleBordered target:self action:nil ],//@selector(cancelNumberPad)],
+                           //                           [[UIBarButtonItem alloc] initWithTitle:@">" style:UIBarButtonItemStyleBordered target:self action:nil ],//@selector(cancelNumberPad)],
+                           [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                           
+                           [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneWithNumberPad:)],
+                           nil];
+    
+    
+    
+    
+    textField.inputAccessoryView = numberToolbar;
+    
     if ([textField isEqual:self.cardCVCField]) {
         [self setPlaceholderToCVC];
     } else {
